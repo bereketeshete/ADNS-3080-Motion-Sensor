@@ -2,6 +2,7 @@
 ADNS 3080 Motion Sensor
 
 
+## Supplementary
 -----------
 // Registers: <br>
 #define ADNS3080_PRODUCT_ID           0x00 <br>
