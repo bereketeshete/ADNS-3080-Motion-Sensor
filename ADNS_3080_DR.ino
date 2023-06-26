@@ -1,3 +1,5 @@
+//#include <LiquidCrystal.h>
+
 
 // written by Bereket Kebede
 // Dextrous Robotics
@@ -6,8 +8,16 @@
  */
 //#include <ADNS3080.h>
 
+
+// Uses ATPMEGA328 Old Bootloader
+
+
 #include <Arduino.h>
 #include <SPI.h>
+// Include the libraries:
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
 
 #ifndef ADNS3080_h
 #define ADNS3080_h 
@@ -34,6 +44,9 @@
 #define ADNS3080_PIXEL_BURST          0x40
 #define ADNS3080_MOTION_BURST         0x50
 #define ADNS3080_PRODUCT_ID_VALUE     0x17
+
+
+
 
 //--------------- Template Parameters ---------------- [ No characters after backlash! ]
 
@@ -79,18 +92,39 @@ class ADNS3080 {
 #define LED_MODE      false     // If true, enables LED Mode
 #define RESOLUTION    false     // If true, enable high resolution mode 
 
+
+// Define SDA and SCL pin for LCD:
+#define SDAPin A4 // Data pin
+#define SCLPin A5 // Clock pin
+// Connect to LCD via I2C, default address 0x27 (A0-A2 not jumpered):
+LiquidCrystal_I2C lcd = LiquidCrystal_I2C(0x27,20,4); //Change to (0x27,16,2) for 1602 LCD
+
+
+// Define variables:
+long duration;
+int distance;
+
+
 ADNS3080 <PIN_RESET, PIN_CS> sensor;
 
 // Initial position
 int x = 0;
 int y = 0;
+int count = 0;
+unsigned long StartTime;
+
+
+
 
 void setup() {
   sensor.setup( LED_MODE, RESOLUTION );
   Serial.begin(9600);
   pinMode(2, OUTPUT);
+  //Initiate the LCD:
+  lcd.init();
+  lcd.backlight();
+  StartTime = millis();
 }
-
 
 float direction(int8_t dx, int8_t dy){
   // RAD2DEG = angle * 180 / PI;
@@ -98,16 +132,24 @@ float direction(int8_t dx, int8_t dy){
   return angle;
 }
 
-int8_t mag(int8_t dx, int8_t dy){
-  int8_t d_avg = sqrt (pow (dx, 2) + pow (dy, 2));
+float mag(float dx, float dy){
+  float d_avg = sqrt (pow (dx, 2) + pow (dy, 2));
   return d_avg;
+}
+
+void occlusion_sensor(uint8_t max_pixel){
+    if (max_pixel < 30) {
+    digitalWrite(2, HIGH);
+  } else {
+    digitalWrite(2, LOW);
+  }
 }
 
 
 void loop() {
   uint8_t  motion;      // Did motion occur? true or false
   int8_t   dx, dy;      // Displacement since last function call
-  uint8_t  squal;       // Surface quality value - Larger value means better tracking. If below ~15 the displacement is dissabled. Adjust focus for 30 or more.
+  uint8_t  squal;       //  Surface quality value - Larger value means better tracking. If below ~15 the displacement is dissabled. Adjust focus for 30 or more.
   uint16_t shutter;     // Camera shutter rate in clock cycles.
   uint8_t  max_pixel;   // Maximum pixel value of current frame (max brightness)
 
@@ -120,29 +162,80 @@ void loop() {
   y += dy;
 
   //print magnitude and angle of movt
-  // float angle = atan2(dy, dx) * RAD2DEG;
-  //int8_t displacement = norm(dx,dy)
-  int8_t average = mag(dx,dy);
+  float average_dist = mag(dx,dy);
   float my_angle = direction(dx,dy);
+
+  ////////////////////////////////////////
+  // option 2
+  
+  // Serial.print("Average:");
+  // Serial.println(average_dist);
+  // Serial.print("angle:");
+  // Serial.println(my_angle);
+
+  //   // occlusions sensor
+  // occlusion_sensor(max_pixel);
+
+  // if (max_pixel < 20) {
+  //   digitalWrite(2, HIGH);
+  // } else {
+  //   digitalWrite(2, LOW);
+  // }
+
+
+  ////////////////////////////////////////
+  // option 3, measure requency
+  
+  // unsigned long CurrentTime = millis();
+  // unsigned long ElapsedTime = CurrentTime - StartTime;
+  // unsigned long threshold = 1000;
+
+  // // how many loop updates until 1000ms/1 sec is reached
+  // if (ElapsedTime < 1000){
+  //   count = count+1;
+  //   Serial.println(ElapsedTime);
+  // }
+  // else {
+  //   // quit
+  //   Serial.print("frequency is: ");
+  //   Serial.print(count);
+  //   Serial.println(" Hz");
+  //     // Display the distance on the LCD:
+  //   lcd.setCursor(0,0); // Set the cursor to column 1, line 1 (counting starts at zero)
+  //   lcd.print("Poll Frequency "); // Prints string "Display = " on the LCD
+  //   lcd.setCursor(0,1); // Set the cursor to column 1, line 1 (counting starts at zero)
+  //   lcd.print(count); // Prints the measured distance
+  //   lcd.print(" Hz "); // Prints "cm" on the LCD, extra spaces are needed to clear previously displayed characters
+    
+  // }
+
+
+  /////////////////////////////////////
+  // new
   
   Serial.print("Average:");
-  Serial.println(average);
+  Serial.println(average_dist);
   Serial.print("angle:");
   Serial.println(my_angle);
 
+  lcd.setCursor(0,0); // Set the cursor to column 1, line 1 (counting starts at zero)
+  lcd.print("count"); // Prints string "Display = " on the LCD
+  lcd.setCursor(0,1); // Set the cursor to column 1, line 1 (counting starts at zero)
+  //lcd.print(round(average_dist)); // Prints the measured distance
+  lcd.print(average_dist); // Prints the measured distance
 
-  // if (my_output_flag == "serial_digital_output"){
-  //    Serial.print("Average:");
-  //    Serial.println(average);
-  //    Serial.print("angle:");
-  //    Serial.println(my_angle);
-  // }
-  // else {
-  //   Serial.println("choose correct output flag");
-  // }
+  delay(500);
 
- 
-  
+  if (my_output_flag == "serial_digital_output"){
+     Serial.print("Average:");
+     Serial.println(average_dist);
+     Serial.print("angle:");
+     Serial.println(my_angle);
+  }
+  else {
+    Serial.println("choose correct output flag");
+  }
+  /////////////////////////////////////////////////////////
 
 
   // Serial.print("Distance:");
@@ -161,8 +254,10 @@ void loop() {
   // Serial.print("Angle=");
   // Serial.println(angle);
 
-  // Other values:
-  //Serial.print( "motionsensor:" );
+  ////////////////////////////////////////
+  // option 4
+
+  // Serial.print( "motionsensor:" );
   // Serial.print("motn=");
   // Serial.println(motion);
   // Serial.print("squal=" );
@@ -183,11 +278,11 @@ void loop() {
   // Serial.print( y );
   // Serial.println();
 
-  if (motion == 1) {
-      digitalWrite(2, HIGH);
-    } else {
-      digitalWrite(2, LOW);
-    }
+  // if (motion == 1) {
+  //     digitalWrite(2, HIGH);
+  //   } else {
+  //     digitalWrite(2, LOW);
+  //   }
 
 
   // a funtion motion w
@@ -196,4 +291,6 @@ void loop() {
   // } else {
   //   digitalWrite(2, LOW);
   // }
+
+
 }
