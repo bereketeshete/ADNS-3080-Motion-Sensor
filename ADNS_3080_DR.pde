@@ -13,12 +13,13 @@ void setup()
 
 void draw() 
 {
+  //read when reset is pressed on Nema 17 
   if (COMPort.available() > 0) {  // If data is available,
     String read = COMPort.readString();  // read and store it to string read
     //read = "value : " + read;
     println(read);
     lines = append(lines, read);// append new read to string lines
   } else {
-    saveStrings("Experiment 17.txt", lines);//save string to file
+    saveStrings("Experiment 19.txt", lines);//save string to file
   }
 }
