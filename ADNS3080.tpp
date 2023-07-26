@@ -19,7 +19,7 @@ template<TEMPLATE_TYPE>
 uint8_t ADNS3080<TEMPLATE_INPUTS>
 ::readRegister( const uint8_t reg ) {
   // Enable communication
-  digitalWrite( PIN_NCS, LOW );
+  digitalWrite( PIN_NCS, LOW ); // The serial port is activated after the NCS pin goes low
   SPI.transfer( reg );
   delayMicroseconds( ADNS3080_T_SRAD_MOT );
   

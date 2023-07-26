@@ -1,8 +1,12 @@
 #include <Arduino.h>
 #include <SPI.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
+
 
 #ifndef ADNS3080_h
-#define ADNS3080_h 
+#define ADNS3080_h
+
 
 //------------ Constants and registers ---------------
 
@@ -59,5 +63,30 @@ class ADNS3080 {
 };
 
 #include "ADNS3080.tpp"
+
+//----------------External Functions ----------------------
+
+float measure_frequency(unsigned long StartTime, unsigned long NextTime){
+  float period = NextTime - StartTime;
+  float frequency = 1.00/period;
+  return frequency;
+}
+
+float direction(int8_t dx, int8_t dy){
+  // RAD2DEG = angle * 180 / PI;
+  float angle = atan2(dy, dx) * 180 / PI;
+  return angle;
+}
+
+float mag(float dx, float dy){
+  float d_avg = sqrt (pow (dx, 2) + pow (dy, 2));
+  return d_avg;
+}
+
+int8_t magni(int8_t dx, int8_t dy){
+  int8_t d_avg = sqrt (pow (dx, 2) + pow (dy, 2));
+  return d_avg;
+}
+
 
 #endif
