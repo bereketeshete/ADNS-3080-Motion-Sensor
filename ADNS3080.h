@@ -78,14 +78,24 @@ float direction(int8_t dx, int8_t dy){
   return angle;
 }
 
+int8_t magni(int8_t dx, int8_t dy){
+  int8_t d_avg = sqrt (pow (dx, 2) + pow (dy, 2));
+  return d_avg;
+}
+
 float mag(float dx, float dy){
   float d_avg = sqrt (pow (dx, 2) + pow (dy, 2));
   return d_avg;
 }
 
-int8_t magni(int8_t dx, int8_t dy){
-  int8_t d_avg = sqrt (pow (dx, 2) + pow (dy, 2));
-  return d_avg;
+
+void occlusion_sensor(uint8_t max_pixel){
+    if (max_pixel < 30) {
+    digitalWrite(2, HIGH);
+  } else {
+    // object infront of it
+    digitalWrite(2, LOW);
+  }
 }
 
 
