@@ -20,7 +20,7 @@ String top_adns = "/dev/ttyUSB2";
 
 void setup() 
 {
-  frameRate(5);
+  frameRate(60);
   size(200, 200);
   COMPort = new Serial(this, portName, 9600);
   COMPort_2 = new Serial(this, portName_2, 9600);
@@ -34,21 +34,21 @@ void draw()
     String read = COMPort.readString();  // read and store it to string read
     println(read);
     lines = append(lines, read);// append new read to string lines  
-    saveStrings("Data/Experiment_26_side.txt", lines);//save string to file
+    saveStrings("Data/Experiment_30_side.txt", lines);//save string to file
    } 
     else {  
      println("Correct side port can't be found");
    }  
    
-   if (portName_2.equals(top_adns) == true){                                                                                                                                                                                                
-    String read_2 = COMPort_2.readString();  // read and store it to string read
-    println(read_2);
-    lines_2 = append(lines_2, read_2);// append new read to string lines
-    saveStrings("Data/Experiment_26_top.txt", lines_2);//save string to file
-   }
-   else {
-     println("Correct top port can't be found");
-   }  
+   //if (portName_2.equals(top_adns) == true){                                                                                                                                                                                                
+   // String read_2 = COMPort_2.readString();  // read and store it to string read
+   // println(read_2);
+   // lines_2 = append(lines_2, read_2);// append new read to string lines
+   // saveStrings("Data/Experiment_30_top.txt", lines_2);//save string to file
+   //}
+   //else {
+   //  println("Correct top port can't be found");
+   //}  
     
   currentTime = millis();
   ElapsedTime = currentTime - StartTime;
