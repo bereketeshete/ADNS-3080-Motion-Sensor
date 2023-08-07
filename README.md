@@ -2,6 +2,8 @@
 ADNS 3080 Motion Sensor
 
 
+Written by: Bereket Kebede
+
 ## Supplementary
 -----------
 // Registers: <br>
@@ -12,3 +14,8 @@ ADNS 3080 Motion Sensor
 #define ADNS3080_PIXEL_BURST          0x40 <br>
 #define ADNS3080_MOTION_BURST         0x50 <br>
 #define ADNS3080_PRODUCT_ID_VALUE     0x17 <br>
+
+
+## Licences 
+
+CC attributes
