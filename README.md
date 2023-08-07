@@ -18,4 +18,4 @@ Written by: Bereket Kebede
 
 ## Licences 
 
-CC attributes
+MIT License
