@@ -93,7 +93,7 @@ void loop() {
   int8_t dxx = convTwosComp(dx);
   int8_t dyy = convTwosComp(dy);
 
-  //occlusion_sensor(max_pixel);
+  occlusion_sensor(max_pixel);
   float speed = dxx;
   Serial.println(speed);
 
@@ -103,6 +103,6 @@ void loop() {
   //lcd.print(" cm/s"); // Prints the measured distance
   //digitalWrite(PIN_LED,LOW);
   digitalWrite(PIN_LED, LOW);
-  delay(500);
+  delay(50); //50ms very good so far
 }
 
