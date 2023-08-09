@@ -28,15 +28,15 @@ String portName = Serial.list()[0];
 String portName_2 = Serial.list()[2];
 String side_adns = "/dev/ttyUSB0";
 String top_adns = "/dev/ttyUSB3";
-int experiment_number = 33;
+int experiment_number = 34;
 
 void setup() 
 {
-  f = createFont("Arial",16,true);
+  f = createFont("Arial",24,true);
   textFont(f);
   fill(0);
   frameRate(60);
-  size(200, 200);
+  size(800, 800);
   surface.setTitle("ADNS 3080");
   COMPort = new Serial(this, portName, 9600);
   COMPort_2 = new Serial(this, portName_2, 9600);
@@ -47,10 +47,12 @@ void setup()
 void draw() 
 {
   textAlign(CENTER);
-  text("ADNS 3080",width/2,20);
+  //text("ADNS 3080",width/2,20);
+  background(0);
   //read when reset is pressed on Nema 17 
   line(width/2-20, height/2, width/2+20, height/2);
   read_top_sensor();
+  read_side_sensor();
   currentTime = millis();
   ElapsedTime = currentTime - StartTime;
   
@@ -75,8 +77,14 @@ void read_top_sensor(){
     String read_2 = COMPort_2.readString();  // read and store it to string read
     println(read_2);
     lines_2 = append(lines_2, read_2);// append new read to string lines
-    saveStrings("Data/Experiment_33_top.txt", lines_2);//save string to file
+    saveStrings("../Data/Experiment_34_top.txt", lines_2);//save string to file
     //text(lines_2[0], width/2,40);
+    if (read_2!= null){
+      text("top sensor:", (width/2)-100,100);
+      text(read_2.split("\n")[0], width/2,100);
+      fill(0, 408, 612);
+      //background(196);
+    }
    }
    else {
      println("Correct top port can't be found");
@@ -88,8 +96,13 @@ void read_top_sensor(){
     String read = COMPort.readString();  // read and store it to string read
     println(read);
     lines = append(lines, read);// append new read to string lines  
-    saveStrings("Data/Experiment_33_side.txt", lines);//save string to file
-    text(lines[0], width/2,40);
+    saveStrings("../Data/Experiment_34_side.txt", lines);//save string to file
+    if (read != null){
+      text("side sensor:", (width/2)-100,40);
+      text(read.split("\n")[0], width/2,40);
+      fill(0, 408, 612);
+      //background(196);
+    }
    } 
     else {  
      println("Correct side port can't be found");
