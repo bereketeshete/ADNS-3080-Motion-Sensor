@@ -32,15 +32,16 @@ int experiment_number = 34;
 
 void setup() 
 {
-  f = createFont("Arial",24,true);
+  f = createFont("Arial",40,true);
   textFont(f);
   fill(0);
-  frameRate(60);
+  frameRate(10);
   size(800, 800);
   surface.setTitle("ADNS 3080");
   COMPort = new Serial(this, portName, 9600);
   COMPort_2 = new Serial(this, portName_2, 9600);
   println(portName_2);
+  background(0);
   
 }
 
@@ -48,7 +49,11 @@ void draw()
 {
   textAlign(CENTER);
   //text("ADNS 3080",width/2,20);
-  background(0);
+  //background(0);
+  
+  fill(0);
+  rect(360, 15, 100, 100);
+      
   //read when reset is pressed on Nema 17 
   line(width/2-20, height/2, width/2+20, height/2);
   read_top_sensor();
@@ -64,10 +69,10 @@ void draw()
   //  }
   //}
   
-  if (ElapsedTime >= 60000){
-    noLoop();
-    text("Done.",width/4,60);
-  }
+  //if (ElapsedTime >= 60000){
+  //  noLoop();
+  //  text("Done.",width/4,60);
+  //}
   
 }
 ////////////////////////// Functions  
@@ -80,7 +85,11 @@ void read_top_sensor(){
     saveStrings("../Data/Experiment_34_top.txt", lines_2);//save string to file
     //text(lines_2[0], width/2,40);
     if (read_2!= null){
-      text("top sensor:", (width/2)-100,100);
+      
+      fill(0, 408, 612);
+      //fill(0);
+      //rect(360, 20, 120, 120);
+      text(" top sensor: ", (width/2)-110,100);
       text(read_2.split("\n")[0], width/2,100);
       fill(0, 408, 612);
       //background(196);
@@ -98,10 +107,14 @@ void read_top_sensor(){
     lines = append(lines, read);// append new read to string lines  
     saveStrings("../Data/Experiment_34_side.txt", lines);//save string to file
     if (read != null){
-      text("side sensor:", (width/2)-100,40);
+      
+      fill(0, 408, 612);
+      //fill(0);
+      //rect(360, 20, 120, 120);
+      //background(196);
+      text("side sensor: ", (width/2)-110,40);
       text(read.split("\n")[0], width/2,40);
       fill(0, 408, 612);
-      //background(196);
     }
    } 
     else {  
