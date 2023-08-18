@@ -1,5 +1,5 @@
 # ADNS-3080-Motion-Sensor
-ADNS 3080 Motion Sensor
+ADNS 3080 Motion Sensor Development for TACER (Two Armed Conical Frustum End-Effector Robot)
 
 
 Written by: Bereket Kebede <br>
