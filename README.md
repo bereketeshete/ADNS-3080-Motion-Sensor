@@ -6,7 +6,7 @@ Written by: Bereket Kebede <br>
 Part of Dextrous Robotics Internship <br>
 Supervised by: Dr.Samuel Zaplosky & Dr. Evan Drumwright <br><br>
 
-Last updated: August 17, 2023
+Last updated: August 22, 2023
 
 ## Supplementary
 -----------
