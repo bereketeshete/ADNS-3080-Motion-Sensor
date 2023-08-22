@@ -8,6 +8,15 @@ Supervised by: Dr.Samuel Zaplosky & Dr. Evan Drumwright <br><br>
 
 Last updated: August 22, 2023
 
+
+
+## Usage 
+
+```sh
+  git clone https://github.com/bereketeshete/ADNS-3080-Motion-Sensor
+  ```
+
+
 ## Supplementary
 -----------
 // Registers: <br>
