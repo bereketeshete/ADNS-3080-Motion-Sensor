@@ -3,7 +3,7 @@
 // Dextrous Robotics
 // Last updated: July 26, 2023
 
-// Uses ATPMEGA328 Old Bootloader
+// Uses ATPMEGA328P, blue NANO
 /*
  This sketch retrieves motion burst data and explains the output.
  */
@@ -50,11 +50,15 @@ unsigned long StartTime;
 unsigned long CurrentTime;
 unsigned long ElapsedTime ;
 int8_t lock = 0;
+float period = 0; // time for one loop
+float frequency = 0; // how many loops run per sec
+
 
 
 // Initial position
-int xx = 0; // for sensor.displacement burst
-int yy = 0;
+int8_t xx = 0; // for sensor.displacement burst
+int8_t yy = 0;
+int8_t occ_output;
 
 void setup() {
   sensor.setup(LED_MODE,RESOLUTION);
@@ -93,16 +97,42 @@ void loop() {
   int8_t dxx = convTwosComp(dx);
   int8_t dyy = convTwosComp(dy);
 
-  occlusion_sensor(max_pixel);
+  occ_output = occlusion_sensor(max_pixel);
   float speed = dxx;
-  Serial.println(speed);
+
+  Serial.print(dxx);
+  Serial.print(",");
+  Serial.print(dyy);
+  Serial.print(",");
+  Serial.print(occ_output);
+  Serial.print(",");
+  Serial.println(squal);
+
+
+  //Serial.println(dyy);
 
   lcd.setCursor(0,0); // Set the cursor to column 1, line 1 (counting starts at zero)
   lcd.print("speed:"); // Prints string "Display = " on the LCD
   lcd.print(speed, 2); // Prints the measured distance
   //lcd.print(" cm/s"); // Prints the measured distance
-  //digitalWrite(PIN_LED,LOW);
-  digitalWrite(PIN_LED, LOW);
+  digitalWrite(PIN_LED,LOW);
+  
+
+  if (lock == 0){
+      lock = lock + 1;
+      //ang_speed = 1/ElapsedTime;
+      period = ElapsedTime;
+      //ang_speed = 1.00/ (ElapsedTime/1000.00);
+      //if (lock =1){
+      frequency = 1000.00/period;
+      //ang_speed = 6.14 * frequency; // w = 2*pi*f
+  }
+
+
   delay(50); //50ms very good so far
+  
+
+
+
 }
 

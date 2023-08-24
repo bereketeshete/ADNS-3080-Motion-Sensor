@@ -140,8 +140,8 @@ int read_top_sensor(){
       fill(0, 408, 612);
       //background(196);
       //good_2 = int(read_2.split("\n")[0]);
-      top_x = int(read_2.split(",")[0]);
-      top_y = int(read_2.split(",")[1]);
+      top_y = -int(read_2.split(",")[0]);
+      top_x = int(read_2.split(",")[1]);
       top_touch = int(read_2.split(",")[2]);
     }
     
